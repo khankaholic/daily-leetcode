@@ -2,8 +2,8 @@ name: Create LeetCode Daily Problem Issue
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 2 * * *"  # Runs daily at 9am VNT
+  schedule:
+    - cron: "0 2 * * *"  # Runs daily at 9am VNT
 
 jobs:
   create-daily-lc-issue:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
