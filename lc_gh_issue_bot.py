@@ -10,7 +10,7 @@ DEBUG = os.environ.get("DEBUG")
 
 GITHUB_BASE_URL = "https://api.github.com"
 GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY")
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
 
 LEETCODE_BASE_URL = "https://leetcode.com"
 EMOJI = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
@@ -95,19 +95,23 @@ def create_github_issue(title, body):
     repo_url = f"{repos_url}/{GITHUB_REPOSITORY}"
     issues_url = f"{repo_url}/issues"
 
-    session = requests.Session()
+    if not GITHUB_TOKEN:
+        print("❌  Missing GitHub token. Set GITHUB_TOKEN or GH_TOKEN.")
+        return False
+
     headers = {
-        "Authorization": f"token {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
     }
 
-    payload = json.dumps({"title": title, "body": body})
+    payload = {"title": title, "body": body}
 
     if DEBUG:
         print(f"👉  POSTing to {issues_url} with JSON payload:")
-        print(payload)
+        print(json.dumps(payload))
 
-    response = session.post(issues_url, data=payload, headers=headers)
+    response = requests.post(issues_url, json=payload, headers=headers)
     if response.status_code != 201:
         print("❌  Could not create new Github issue!")
         print(f"    Status Code: {response.status_code}")
