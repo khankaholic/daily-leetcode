@@ -10,7 +10,7 @@ DEBUG = os.environ.get("DEBUG")
 
 GITHUB_BASE_URL = "https://api.github.com"
 GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY")
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("LC_GH_TOKEN")
 
 LEETCODE_BASE_URL = "https://leetcode.com"
 EMOJI = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
@@ -96,7 +96,7 @@ def create_github_issue(title, body):
     issues_url = f"{repo_url}/issues"
 
     if not GITHUB_TOKEN:
-        print("❌  Missing GitHub token. Set GITHUB_TOKEN or GH_TOKEN.")
+        print("❌  Missing GitHub token. Set GITHUB_TOKEN or LC_GH_TOKEN.")
         return False
 
     headers = {
